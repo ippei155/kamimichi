@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>KAMIMICHI — 日本神話の関係マップ</title>
+<link rel="stylesheet" href="app-1.css">
+<link rel="stylesheet" href="app-2.css">
+</head>
+<body>
+<!-- GitHub Pages build: 2026-09-06 -->
+<div id="app">
+  <header class="topbar">
+    <div class="brand"><div class="brandMark">神</div><div class="brandText"><strong>KAMIMICHI</strong><span>日本神話の関係マップ V10</span></div></div>
+    <button id="mobileMenu" class="iconBtn mobileMenu">☰</button>
+    <div class="searchWrap"><span class="searchIcon">⌕</span><input id="search" placeholder="かみさまをさがす：アマテラス、すさのお、じんむ…" autocomplete="off"/><div id="searchResults" class="searchResults"></div></div>
+    <div class="topActions"><button id="resetBtn" class="iconBtn">全体表示</button></div>
+  </header>
+
+  <aside id="left" class="left">
+    <div class="storyCard">
+      <div class="step">BEGINNER MODE</div>
+      <h3 id="storyTitle">まずは、一本の背骨だけ。</h3>
+      <p id="storyText">日本神話を知らなくても大丈夫。まず「アマテラスから神武まで」の中心線だけ見ます。</p>
+      <div class="storyActions"><button id="storyNext" class="storyPrimary">この流れを見る</button><button id="storySkip" class="storySecondary">自由に見る</button></div>
+    </div>
+
+    <div class="sectionTitle">見方を選ぶ</div>
+    <button class="viewBtn active" data-view="beginner"><span class="viewIcon">◎</span><span class="viewCopy"><strong>はじめての日本神話</strong><span>重要な神だけ。迷わない表示。</span></span></button>
+    <button class="viewBtn" data-view="imperial"><span class="viewIcon">☀</span><span class="viewCopy"><strong>アマテラスから神武へ</strong><span>皇統につながる中心ルート。</span></span></button>
+    <button class="viewBtn" data-view="izumo"><span class="viewIcon">国</span><span class="viewCopy"><strong>スサノオと大国主</strong><span>国作りと国譲りの物語。</span></span></button>
+    <button class="viewBtn" data-view="merges"><span class="viewIcon">⌁</span><span class="viewCopy"><strong>山と海はどこでつながる？</strong><span>神武へ合流する別の家系。</span></span></button>
+    <button class="viewBtn" data-view="all"><span class="viewIcon">∞</span><span class="viewCopy"><strong>全体マップ</strong><span>現在収録している神をすべて表示。</span></span></button>
+
+    <div class="sectionTitle">主要な物語</div>
+    <div id="storyMenu" class="storyMenu"></div>
+
+    <div class="sectionTitle">関係を絞る</div>
+    <div class="filterRow"><button class="filterChip active" data-type="lineage">親子・系譜</button><button class="filterChip active" data-type="marriage">婚姻</button><button class="filterChip active" data-type="purification">禊・誕生</button><button class="filterChip active" data-type="transfer">国譲り</button></div>
+  </aside>
+
+  <main class="mapWrap">
+    <div class="mapHeader"><strong id="mapTitle">はじめての日本神話</strong><span id="mapSubtitle">最重要人物だけ表示しています。神様をクリックして関係を追えます。</span></div>
+    <div class="pinchNote">2本指で拡大・縮小</div><div class="mapTools"><button id="fitBtn" title="全体が見える位置に戻す" aria-label="全体表示">⌂</button></div>
+    <svg id="mapSvg" viewBox="0 0 1100 720" aria-label="日本神話の関係マップ">
+      <g id="viewport"><g id="clusters"></g><g id="edges"></g><g id="nodes"></g></g>
+    </svg>
+  </main>
+
+  <aside id="right" class="right">
+    <div id="rightEmpty" class="rightEmpty"><div class="big">◎</div><strong>神様をクリック</strong><p>何をした神なのか、誰とつながるのか、どこで祀られているのかをここに表示します。</p></div>
+    <div id="profile" class="profile">
+      <div class="profileHead"><button id="profileBack" class="profileBack"><span class="arrow">←</span> 関係マップに戻る</button><div id="profileBadge" class="profileBadge"></div><h2 id="profileName"></h2><div id="profileReading" class="profileReading"></div><div id="profileTags" class="profileTags"></div></div>
+      <div class="profileBody"><div class="portraitCard"><div id="portraitVisual" class="portraitVisual"></div><div class="portraitInfo"><div class="portraitLabel"><strong>AI史料ベース再構成イメージ</strong><span class="reconBadge">RECONSTRUCTION</span></div><p class="portraitNote">確定した肖像ではありません。原典に残る描写・神格・象徴・後世の図像的モチーフをもとに、AIで学習用の視覚イメージとして再構成しています。</p><div class="portraitBasis"><b>この見た目の根拠</b><p id="portraitBasis"></p><span id="portraitConfidence" class="portraitConfidence"></span></div></div></div><h3>この神様を一言で</h3><p id="profileSummary"></p><h3>何をした？</h3><p id="profileStory"></p><h3>この神が登場する主要な物語</h3><div id="profileStories" class="profileStories"></div><div class="factGrid"><div class="factBox"><b>別名・表記</b><span id="profileAliases"></span></div><div class="factBox"><b>古事記の主な登場箇所</b><span id="profileAppearances"></span></div></div><details class="knowledgeBlock" open><summary>主なエピソード</summary><div class="knowledgeInner"><div id="episodeList" class="episodeList"></div></div></details><details class="knowledgeBlock"><summary>古事記と日本書紀で見る</summary><div class="knowledgeInner compareGrid"><div class="compareBox kojiki"><b>古事記</b><p id="kojikiNote"></p></div><div class="compareBox nihonshoki"><b>日本書紀</b><p id="nihonshokiNote"></p></div></div></details><details class="knowledgeBlock"><summary>研究上の見どころ</summary><div class="knowledgeInner"><p id="profileInterpretation"></p></div></details><h3>この神から見た関係</h3><div id="relationList" class="relationList"></div><h3>代表的な神社</h3><div id="shrineList" class="shrineList"></div><h3>情報源・原典を読む</h3><div id="sourceList" class="sourceList"></div><div class="dataNote">説明文は國學院大學「古典文化学」事業の神名データベース等を中心に要約・再構成。古事記全文は青空文庫、日本書紀原文はWikisourceへリンクしています。</div><div class="profileActions"><button id="focusBtn" class="primary">この神を中心に見る</button><button id="backAllBtn">選択を解除</button></div></div>
+    </div>
+  </aside>
+  <div id="storyOverlay" class="storyOverlay hidden" aria-hidden="true"><article class="storySheet" role="dialog" aria-modal="true" aria-labelledby="mythStoryTitle"><button id="storyClose" class="storyClose" aria-label="閉じる">×</button><div id="mythStoryKind" class="storyKind">MAJOR STORY</div><h2 id="mythStoryTitle"></h2><div id="mythStorySub" class="storySub"></div><p id="mythStoryNarrative" class="storyNarrative"></p><div class="storyMeta"><h3>登場する神々</h3><div id="mythStoryGods" class="storyGodList"></div></div><div class="storyMeta"><h3>原典・研究データ</h3><div id="mythStorySources" class="storySourceList"></div></div><div class="storyHint">この文章は『古事記』を中心に、國學院大學「古典文化学」事業の本文・注釈・あらすじ等を参照して、初心者が因果関係を追いやすいよう要約・再構成しています。『日本書紀』には異なる伝承がある場合があります。</div></article></div>
+  <div id="termOverlay" class="termOverlay hidden" aria-hidden="true"><section class="termSheet" role="dialog" aria-modal="true" aria-labelledby="termTitle"><button id="termClose" class="termClose" aria-label="閉じる">×</button><div id="termKind" class="termKind"></div><h2 id="termTitle"></h2><div id="termReading" class="termReading"></div><p id="termLead" class="termLead"></p><div class="termSection"><h3>なぜ大事？</h3><p id="termWhy"></p></div><div class="termSection"><h3>関係する神</h3><div id="termGods" class="termGods"></div></div><div class="termSection"><h3>原典・研究データ</h3><div id="termSources" class="termSources"></div></div></section></div>
+</div>
+<script src="js/app-01.js"></script>
+<script src="js/app-02.js"></script>
+<script src="js/app-03.js"></script>
+<script src="js/app-04.js"></script>
+<script src="js/app-05.js"></script>
+<script src="js/app-06.js"></script>
+<script src="js/app-07.js"></script>
+<script src="js/app-08.js"></script>
+</body>
+</html>
