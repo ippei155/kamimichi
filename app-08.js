@@ -1,5 +1,5 @@
-const KAM_SHEET1='assets/portrait-sheet-1.jpg';
-const KAM_SHEET2='assets/portrait-sheet-2.jpg';
+const KAM_SHEET1='assets/portrait-sheet-1.webp';
+const KAM_SHEET2='assets/portrait-sheet-2.webp';
 KAM.sprite={
   izanagi:[KAM_SHEET1,0,0],
   izanami:[KAM_SHEET1,1,0],
