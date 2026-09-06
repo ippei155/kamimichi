@@ -49,6 +49,31 @@ jobs:
             git push
           fi
 
+      - name: Finalize high-quality AVIF portraits
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f FINALIZE_AVIF ]; then
+            test -f portrait-avif-upload/sheet1-00.part
+            test -f portrait-avif-upload/sheet1-01.part
+            test -f portrait-avif-upload/sheet1-02.part
+            test -f portrait-avif-upload/sheet2-00.part
+            test -f portrait-avif-upload/sheet2-01.part
+            test -f portrait-avif-upload/sheet2-02.part
+            mkdir -p assets
+            cat portrait-avif-upload/sheet1-*.part | tr -d '\n\r' | base64 -d > assets/portrait-sheet-1.avif
+            cat portrait-avif-upload/sheet2-*.part | tr -d '\n\r' | base64 -d > assets/portrait-sheet-2.avif
+            test -s assets/portrait-sheet-1.avif
+            test -s assets/portrait-sheet-2.avif
+            rm -rf portrait-avif-upload
+            rm -f FINALIZE_AVIF
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add -A
+            git commit -m 'Add high-quality AVIF deity portraits [skip ci]'
+            git push
+          fi
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
