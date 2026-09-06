@@ -3,10 +3,13 @@ name: Deploy KAMIMICHI to GitHub Pages
 on:
   push:
     branches: [main]
+    paths:
+      - '.github/workflows/sync-pages.yml'
+      - 'FINALIZE_IMAGES'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -23,6 +26,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Assemble portrait image sheets
+        shell: bash
+        run: |
+          set -euo pipefail
+          if compgen -G 'staging/sheet1-*.part' > /dev/null && compgen -G 'staging/sheet2-*.part' > /dev/null; then
+            mkdir -p assets
+            cat staging/sheet1-*.part | base64 -d > assets/portrait-sheet-1.jpg
+            cat staging/sheet2-*.part | base64 -d > assets/portrait-sheet-2.jpg
+            rm -rf staging
+            rm -f FINALIZE_IMAGES
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add -A
+            git commit -m 'Finalize deity portrait assets [skip ci]'
+            git push
+          fi
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
